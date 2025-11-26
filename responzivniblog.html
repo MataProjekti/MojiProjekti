@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="sr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Responsive Blog Template</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f3f4f7;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 20px auto;
+      padding: 15px;
+    }
+
+    header {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    nav {
+      margin-top: 15px;
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    nav a {
+      background: #005be5;
+      padding: 10px 18px;
+      color: white;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .hero img {
+      width: 100%;
+      border-radius: 10px;
+      margin: 20px 0;
+    }
+
+    .content {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    @media (min-width: 850px) {
+      .content {
+        grid-template-columns: 1fr 280px;
+      }
+    }
+
+    article {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    aside {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      height: fit-content;
+    }
+
+    .related-posts li {
+      margin-bottom: 10px;
+    }
+
+    .related-posts a {
+      text-decoration: none;
+      color: #005be5;
+      font-weight: bold;
+    }
+
+    .section {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 20px;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 20px;
+      color: gray;
+    }
+  </style>
+</head>
+
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <header>
+    <h1>Frontend Blog — Mateja Aleksov</h1>
+    <p>Blog jednog studenta koji uči frontend i želi da postane developer u Japanu.</p>
+
+    <nav>
+      <a href="#top">Početna</a>
+      <a href="#autor">O autoru</a>
+      <a href="#kontakt">Kontakt</a>
+    </nav>
+  </header>
+
+  <!-- HERO SLIKA -->
+  <div class="hero">
+    <img src="https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=1400&q=60" 
+         alt="Programiranje na računaru">
+  </div>
+
+  <!-- GLAVNI SADRŽAJ -->
+  <div class="content">
+
+    <!-- ARTICLE -->
+    <article id="top">
+      <h2>Kako napraviti responzivan blog koristeći semantički HTML</h2>
+
+      <p>
+        U ovom postu naučićeš kako da napraviš jednostavan, čist i responzivan blog koristeći samo
+        HTML i osnove CSS-a. Fokus je na semantičkim elementima koji Google i brovzeri
+        mnogo bolje razumeju.
+      </p>
+
+      <p>
+        Semantički HTML znači koristiti elemente koji imaju smisao — kao što su
+        <strong>&lt;header&gt;</strong>, <strong>&lt;nav&gt;</strong>, <strong>&lt;article&gt;</strong>, 
+        <strong>&lt;section&gt;</strong> i <strong>&lt;footer&gt;</strong>.  
+        Ovo čini tvoj kod čitljivijim i profesionalnijim.
+      </p>
+
+      <h3 id="html-post">1. Kako početi sa HTML-om</h3>
+      <p>
+        HTML je struktura svake web stranice i predstavlja kostur koji sve drži na okupu.
+        Html je ono što korisnik vidi,CSS je za ulepšavanje korisničkog interfejsa dok je JavaSkript zaslužan za njegov rad  
+        Najvažnije za početak učenja htmla je da se nauči osnovni tagovi.  
+        Treba se fokusirati na ove tagove: <strong>p</strong>, <strong>h1-h6</strong>, <strong>img</strong>,
+        <strong>a</strong>, <strong>div</strong>, <strong>section</strong>, 
+        <strong>article</strong>, <strong>header</strong> i <strong>footer</strong>.
+      </p>
+
+      <p>
+        Kada dobro razumeš HTML strukturu, kasnije ti CSS i JavaScript postanu mnogo lakši.
+      </p>
+
+      <h3 id="js-events">2. Osnovni JavaScript događaja</h3>
+      <p>
+        JavaScript omogućava da tvoja web stranica reaguje na akcije korisnika — to se zove "event".
+        Najčešći eventi su: <strong>click</strong>, <strong>mouseenter</strong>,
+        <strong>input</strong>, <strong>submit</strong> i <strong>keydown</strong>.
+      </p>
+
+      <p>
+        Na primer, kada klikneš na dugme — JavaScript može da pokrene funkciju koja menja tekst,
+        boju, dodaje element ili šalje podatke.
+      </p>
+
+      <h3 id="responsive">3. Responzivni dizajn – Grid vs Flexbox</h3>
+      <p>
+        Responzivan dizajn znači da se stranica lepo prikazuje na mobilnom, tabletu i desktopu.
+      </p>
+
+      <p>
+        Flexbox je odličan za raspored u jednom pravcu — horizontalno ili vertikalno.  
+        Grid je bolji kada imaš složeniju strukturu sa više kolona i redova.
+      </p>
+
+      <p>
+        Oba sistema su laka kada ih jednom shvatiš, i koristićeš ih svakodnevno u frontend karijeri.
+      </p>
+    </article>
+
+    <!-- SIDEBAR -->
+    <aside>
+      <h3>Srodni postovi</h3>
+      <ul class="related-posts">
+        <li><a href="#html-post">Kako početi sa HTML-om</a></li>
+        <li><a href="#js-events">JavaScript događaji</a></li>
+        <li><a href="#responsive">Grid vs Flex</a></li>
+      </ul>
+    </aside>
+
+  </div>
+
+  <!-- O AUTORU -->
+  <section id="autor" class="section">
+    <h2>O autoru</h2>
+    <p>
+      Zovem se Mateja Aleksov. Student sam 4. godine informacionih tehnologija i cilj mi je da postanem 
+      Frontend Developer u Japanu. Volim jednostavan kod, elegantan dizajn i cilj mi je da se usavršavam svaki dan.
+    </p>
+  </section>
+
+  <!-- KONTAKT -->
+  <section id="kontakt" class="section">
+    <h2>Kontakt</h2>
+    <p>Ako želiš da me kontaktiraš, možeš mi pisati na email:  
+      <strong>aleksovmateja050@gmail.com</strong>
+    </p>
+  </section>
+
+  <footer>
+    © 2025 Mateja Aleksov
+  </footer>
+
+</div>
+</body>
+</html>
