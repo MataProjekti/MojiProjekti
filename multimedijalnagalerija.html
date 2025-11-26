@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="sr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Multimedijalna galerija — Slike i animacije (po redu)</title>
+  <style>
+    :root{
+      --bg:#0f1724; --panel:#0b1220; --muted:#9aa4b2; --accent:#4f46e5;
+      --radius:12px; --card-pad:1rem; --max-width:1100px;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Helvetica Neue";
+    }
+    html,body{margin:0;height:100%;background:linear-gradient(180deg,var(--bg), #071028 120%);color:#e6eef8;line-height:1.35;}
+    .kontejner{max-width:var(--max-width);margin:28px auto;padding:18px;display:grid;gap:20px;grid-template-columns:1fr;}
+    header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;}
+    h1{margin:0;font-size:1.35rem;}
+    p.opis{margin:6px 0 0 0;color:var(--muted);font-size:0.95rem;}
+    .grid-sekcije{display:grid;gap:18px;grid-template-columns:1fr;}
+    @media(min-width:880px){.grid-sekcije{grid-template-columns:1fr 420px;align-items:start;}}
+    .karta{background:linear-gradient(180deg,var(--panel), rgba(11,18,32,0.6));border-radius:var(--radius);padding:var(--card-pad);}
+    .blok{margin-bottom:20px;}
+    .blok img{border-radius:10px;width:100%;height:auto;display:block;}
+    .meta{color:var(--muted);font-size:0.9rem;}
+    .galerija{display:flex;flex-direction:column;gap:12px;}
+    .velika-slika{border-radius:10px;overflow:hidden;display:block;min-height:160px;background:#050612;}
+    .velika-slika img{width:100%;height:auto;display:block;object-fit:cover;}
+    .thumbs{display:flex;gap:10px;overflow:auto;padding-bottom:6px;}
+    .thumb{flex:0 0 auto;width:82px;height:56px;border-radius:8px;overflow:hidden;cursor:pointer;border:2px solid transparent;padding:0;background:transparent;}
+    .thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+    .thumb.selected{border-color:rgba(255,255,255,0.12);}
+    footer{color:var(--muted);font-size:0.9rem;text-align:center;margin-top:8px;}
+
+    .media-anim{margin-top:12px;border-radius:10px;overflow:hidden;background:#010214;border:1px solid rgba(255,255,255,0.03);display:grid;place-items:center;min-height:180px;}
+    .anim-note{font-size:0.85rem;color:var(--muted);margin-top:8px;text-align:center;}
+
+
+    @media(max-width:700px){
+      .media-anim{min-height:140px;}
+    }
+
+  </style>
+</head>
+<body>
+  <div class="kontejner">
+
+    <header>
+      <div>
+        <h1>Multimedijalna galerija — Slike i animacije</h1>
+        <p class="opis">Multimedijalna galerija slike i animacije</p>
+      </div>
+      <div style="text-align:right">
+        <small class="meta">Slika plus animacija jer videi i audio ne rade</small>
+      </div>
+    </header>
+
+    <main class="grid-sekcije">
+
+      <section class="karta" aria-labelledby="media-naslov">
+        <h2 id="media-naslov">Slike + animacije</h2>
+
+        <div class="blok">
+          <img src="https://picsum.photos/id/1015/800/460" alt="Planinski pejzaž" loading="lazy">
+          <p class="opis">Planinski pejzaž.</p>
+          <div class="media-anim" aria-hidden="false" role="img" aria-label="Animacija talasa">
+            <svg viewBox="0 0 800 200" preserveAspectRatio="none" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" style="display:block">
+              <defs>
+                <linearGradient id="gW" x1="0" x2="0" y1="0" y2="1">
+                  <stop offset="0" stop-color="#1e3a8a" stop-opacity="0.9"/>
+                  <stop offset="1" stop-color="#0b1220" stop-opacity="0.4"/>
+                </linearGradient>
+              </defs>
+              <path id="wave" fill="url(#gW)" d="M0 120 C150 80 350 160 800 120 L800 200 L0 200 Z">
+                <animate attributeName="d" dur="6s" repeatCount="indefinite"
+                  values="
+                    M0 120 C150 80 350 160 800 120 L800 200 L0 200 Z;
+                    M0 130 C150 160 350 60 800 130 L800 200 L0 200 Z;
+                    M0 120 C150 80 350 160 800 120 L800 200 L0 200 Z"/>
+              </path>
+            </svg>
+          </div>
+          <div class="anim-note">Animacija — talasa</div>
+        </div>
+
+        <div class="blok">
+          <img src="https://picsum.photos/id/1025/800/460" alt="Šuma" loading="lazy">
+          <p class="opis">Šuma — animacija lišća.</p>
+          <div class="media-anim" role="img" aria-label="Animacija lišća">
+            <svg viewBox="0 0 300 160" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" style="display:block">
+              <g fill="#2f7a3f" opacity="0.95">
+                <circle cx="40" cy="-10" r="6">
+                  <animate attributeName="cy" dur="5s" values="-10;170" repeatCount="indefinite" />
+                  <animate attributeName="cx" dur="5s" values="40;120" repeatCount="indefinite" />
+                </circle>
+                <circle cx="200" cy="-20" r="5" fill="#4bbf6b">
+                  <animate attributeName="cy" dur="6s" values="-20;170" repeatCount="indefinite" />
+                  <animate attributeName="cx" dur="6s" values="200;80" repeatCount="indefinite" />
+                </circle>
+                <circle cx="120" cy="-15" r="7" fill="#3ea25c">
+                  <animate attributeName="cy" dur="7s" values="-15;170" repeatCount="indefinite" />
+                  <animate attributeName="cx" dur="7s" values="120;220" repeatCount="indefinite" />
+                </circle>
+              </g>
+            </svg>
+          </div>
+          <div class="anim-note">Animacija — padajuće lišće</div>
+        </div>
+
+        <div class="blok">
+          <img src="https://picsum.photos/id/1035/800/460" alt="Obala pri zalasku" loading="lazy">
+          <p class="opis">Vodopad — animacija kapljica.</p>
+          <div class="media-anim" role="img" aria-label="Animacija kapljica">
+            <svg viewBox="0 0 200 160" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" style="display:block">
+              <g fill="#88d1ff" opacity="0.9">
+                <ellipse cx="60" cy="-10" rx="3.5" ry="6">
+                  <animate attributeName="cy" dur="1.2s" values="-10;170" repeatCount="indefinite" />
+                </ellipse>
+                <ellipse cx="100" cy="-30" rx="3" ry="5">
+                  <animate attributeName="cy" dur="1s" values="-30;170" repeatCount="indefinite" begin="0.2s"/>
+                </ellipse>
+                <ellipse cx="140" cy="-5" rx="4" ry="7">
+                  <animate attributeName="cy" dur="1.4s" values="-5;170" repeatCount="indefinite" begin="0.4s"/>
+                </ellipse>
+              </g>
+            </svg>
+          </div>
+          <div class="anim-note">Animacija — kapljice vode</div>
+        </div>
+
+ 
+      <div class="blok">
+    <img src="https://media.istockphoto.com/id/1128908941/photo/light-at-the-end-of-the-cherry-tree-tunnel-and-walkway.jpg?s=2048x2048&w=is&k=20&c=-2NDcmKQRCD_6EJCqn2ePfUQWXLVJjLQvkwX1HjtKMY=" alt="Polje cveca japan" loading="lazy">
+  </a>
+  <p class="opis">Polje sa cvećem — lagani pokreti latica.</p>
+  <div class="media-anim" role="img" aria-label="Animacija latica">
+            <svg viewBox="0 0 300 160" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" style="display:block">
+              <g fill="#ffb6c1" opacity="0.95">
+                <ellipse cx="40" cy="170" rx="5" ry="3">
+                  <animate attributeName="cy" dur="6s" values="170;10;170" repeatCount="indefinite"/>
+                  <animate attributeName="cx" dur="6s" values="40;120;40" repeatCount="indefinite"/>
+                </ellipse>
+                <ellipse cx="180" cy="160" rx="6" ry="4" fill="#ff9fbf">
+                  <animate attributeName="cy" dur="7s" values="160;20;160" repeatCount="indefinite" begin="0.6s"/>
+                  <animate attributeName="cx" dur="7s" values="180;80;180" repeatCount="indefinite" begin="0.6s"/>
+                </ellipse>
+              </g>
+            </svg>
+          </div>
+          <div class="anim-note">Animacija — lebdeće latice</div>
+        </div>
+
+        <div class="blok">
+          <img src="https://www.fototapeta.co.rs/wp-content/uploads/2020/11/architecture-building-buildings-city-294560-min-600x323.jpg" alt="Grad noću" loading="lazy">
+          <p class="opis">Grad noću — animacija svetala.</p>
+          <div class="media-anim" role="img" aria-label="Animacija svetla">
+            <svg viewBox="0 0 300 160" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" style="display:block">
+              <rect x="30" y="40" width="30" height="80" fill="#0b2540" />
+              <rect x="70" y="30" width="28" height="90" fill="#071a34" />
+              <rect x="110" y="50" width="24" height="70" fill="#081c36" />
+              <g fill="#ffd97a">
+                <rect x="36" y="50" width="6" height="6">
+                  <animate attributeName="opacity" dur="1.6s" values="1;0.2;1" repeatCount="indefinite" begin="0s"/>
+                </rect>
+                <rect x="76" y="60" width="6" height="6">
+                  <animate attributeName="opacity" dur="1.2s" values="1;0.1;1" repeatCount="indefinite" begin="0.3s"/>
+                </rect>
+                <rect x="116" y="70" width="6" height="6">
+                  <animate attributeName="opacity" dur="2s" values="1;0.2;1" repeatCount="indefinite" begin="0.5s"/>
+                </rect>
+              </g>
+            </svg>
+          </div>
+          <div class="anim-note">Animacija — svetla u gradu</div>
+        </div>
+
+      </section>
+
+      <!-- DESNO: gallery thumbnails -->
+      <aside class="karta" aria-labelledby="gal-naslov">
+        <h2 id="gal-naslov">Galerija slika (responsive)</h2>
+        <p class="opis">Klikni na sličicu ili koristi strelice levo/desno dok je velika slika fokusirana.</p>
+
+        <div class="galerija" id="galerija">
+          <div class="velika-slika karta" id="velikaSlika" tabindex="0" aria-live="polite" aria-label="Velika slika">
+            <picture id="velikiPicture">
+              <source media="(min-width:1000px)" srcset="https://picsum.photos/id/1015/1200/700">
+              <source media="(min-width:600px)" srcset="https://picsum.photos/id/1015/800/467">
+              <img id="velikiImg" src="https://picsum.photos/id/1015/600/350" alt="Planinski pejzaž" loading="lazy">
+            </picture>
+          </div>
+
+          <div class="thumbs" id="thumbs" role="list">
+            <button class="thumb selected" data-id="1015" data-alt="Planinski pejzaž" aria-label="Planinski pejzaž" role="listitem">
+              <img src="https://picsum.photos/id/1015/200/120" alt="Planinski pejzaž" loading="lazy">
+            </button>
+
+            <button class="thumb" data-id="1025" data-alt="Drvo pored puta" aria-label="Drvo pored puta" role="listitem">
+              <img src="https://picsum.photos/id/1025/200/120" alt="Drvo pored puta" loading="lazy">
+            </button>
+
+            <button class="thumb" data-id="1035" data-alt="Obala pri zalasku" aria-label="Obala pri zalasku" role="listitem">
+              <img src="https://picsum.photos/id/1035/200/120" alt="Obala pri zalasku" loading="lazy">
+            </button>
+
+            <button class="thumb" data-id="1045" data-alt="Grad noću" aria-label="Grad noću" role="listitem">
+              <img src="https://picsum.photos/id/1045/200/120" alt="Grad noću" loading="lazy">
+            </button>
+
+            <button class="thumb" data-id="1055" data-alt="Polje sa cvećem" aria-label="Polje sa cvećem" role="listitem">
+              <img src="https://picsum.photos/id/1055/200/120" alt="Polje sa cvećem" loading="lazy">
+            </button>
+          </div>
+        </div>
+      </aside>
+
+    </main>
+
+    <footer class="karta">
+      <small>Napomena: umesto problematičnih YouTube embed-ova sada koristimo inline SVG animacije (ne koriste iframe/postMessage i neće izazvati origin/permission greške). Ako želiš vraćanje embeda ili audio fajlove umesto animacija — javi pa mogu zameniti.</small>
+    </footer>
+  </div>
+
+  <script>
+    // Gallery: thumbnails -> large image (unchanged)
+    (function(){
+      const thumbs = document.querySelectorAll('#thumbs .thumb');
+      const velikiImg = document.getElementById('velikiImg');
+      const velikiPicture = document.getElementById('velikiPicture');
+
+      function setBigImage(id, alt){
+        velikiImg.src = `https://picsum.photos/id/${id}/800/460`;
+        velikiImg.alt = alt || '';
+        const sources = velikiPicture.querySelectorAll('source');
+        sources.forEach(s => {
+          const media = s.getAttribute('media');
+          if (media && media.includes('1000')) s.srcset = `https://picsum.photos/id/${id}/1200/700`;
+          if (media && media.includes('600')) s.srcset = `https://picsum.photos/id/${id}/800/467`;
+        });
+      }
+
+      thumbs.forEach(btn => {
+        btn.addEventListener('click', function(){
+          thumbs.forEach(t => t.classList.remove('selected'));
+          this.classList.add('selected');
+          const id = this.getAttribute('data-id');
+          const alt = this.getAttribute('data-alt') || '';
+          setBigImage(id, alt);
+        });
+      });
+
+      const velikiSlika = document.getElementById('velikaSlika');
+      velikiSlika.addEventListener('keydown', function(e){
+        const selectedIndex = Array.from(thumbs).findIndex(t => t.classList.contains('selected'));
+        if (e.key === 'ArrowRight') {
+          const next = (selectedIndex + 1) % thumbs.length;
+          thumbs[next].click();
+          thumbs[next].focus();
+          e.preventDefault();
+        } else if (e.key === 'ArrowLeft') {
+          const prev = (selectedIndex - 1 + thumbs.length) % thumbs.length;
+          thumbs[prev].click();
+          thumbs[prev].focus();
+          e.preventDefault();
+        }
+      });
+
+      (function init(){
+        const sel = document.querySelector('#thumbs .thumb.selected') || thumbs[0];
+        if (sel) {
+          setBigImage(sel.getAttribute('data-id'), sel.getAttribute('data-alt'));
+        }
+      }());
+    }());
+  </script>
+</body>
+</html>
