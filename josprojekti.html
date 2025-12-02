@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Local Storage To-Do App</title>
+
+<style>
+    :root {
+        --bg: #0f0f0f;
+        --card: #1b1b1b;
+        --accent: #ff4655;
+        --text: #f8f8f8;
+        --sub: #bbbbbb;
+        --radius: 12px;
+        --trans: 0.25s ease;
+    }
+
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        display: flex;
+        justify-content: center;
+        padding: 40px 20px;
+    }
+
+    .container {
+        width: 100%;
+        max-width: 500px;
+        background: var(--card);
+        padding: 30px;
+        border-radius: var(--radius);
+        box-shadow: 0 0 25px rgba(0,0,0,0.4);
+        animation: fadeIn 0.7s ease;
+    }
+
+    @keyframes fadeIn {
+        from {opacity: 0; transform: translateY(10px);}
+        to {opacity: 1; transform: translateY(0);}
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 28px;
+        font-weight: 700;
+    }
+
+    .input-row {
+        display: flex;
+        gap: 10px;
+    }
+
+    #taskInput {
+        flex: 1;
+        padding: 12px;
+        border-radius: var(--radius);
+        border: none;
+        background: #2c2c2c;
+        color: var(--text);
+        font-size: 16px;
+    }
+
+    button {
+        padding: 12px 20px;
+        border-radius: var(--radius);
+        border: none;
+        cursor: pointer;
+        background: var(--accent);
+        color: white;
+        transition: var(--trans);
+        font-weight: 600;
+    }
+
+    button:hover {
+        opacity: 0.9;
+        transform: scale(1.03);
+    }
+
+    ul {
+        margin-top: 20px;
+        padding: 0;
+        list-style: none;
+    }
+
+    li {
+        background: #262626;
+        padding: 14px;
+        border-radius: var(--radius);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+        transition: var(--trans);
+    }
+
+    li.completed {
+        text-decoration: line-through;
+        color: var(--sub);
+        opacity: 0.7;
+    }
+
+    .task-text {
+        flex: 1;
+        cursor: pointer;
+    }
+
+    .delete-btn {
+        background: transparent;
+        color: #ff4655;
+        font-size: 20px;
+        cursor: pointer;
+        border: none;
+    }
+
+    .filters {
+        margin-top: 20px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .filters button {
+        flex: 1;
+        margin-right: 8px;
+    }
+
+    .filters button:last-child {
+        margin-right: 0;
+    }
+</style>
+</head>
+
+<body>
+<div class="container">
+    <h1>To-Do Lista</h1>
+
+    <div class="input-row">
+        <input id="taskInput" type="text" placeholder="Unesi novi zadatak…" aria-label="Unesi zadatak">
+        <button onclick="addTask()">Dodaj</button>
+    </div>
+
+    <div class="filters">
+        <button onclick="setFilter('all')">Sve</button>
+        <button onclick="setFilter('active')">Aktivne</button>
+        <button onclick="setFilter('completed')">Završene</button>
+    </div>
+
+    <ul id="taskList" role="list"></ul>
+</div>
+
+<script>
+    let tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
+    let filter = "all";
+
+    function saveTasks() {
+        localStorage.setItem("tasks", JSON.stringify(tasks));
+    }
+
+    function addTask() {
+        const input = document.getElementById("taskInput");
+        const text = input.value.trim();
+
+        if (!text) return;
+        
+        tasks.push({ text, completed: false });
+        saveTasks();
+        input.value = "";
+        renderTasks();
+    }
+
+    function toggleTask(index) {
+        tasks[index].completed = !tasks[index].completed;
+        saveTasks();
+        renderTasks();
+    }
+
+    function deleteTask(index) {
+        tasks.splice(index, 1);
+        saveTasks();
+        renderTasks();
+    }
+
+    function setFilter(type) {
+        filter = type;
+        renderTasks();
+    }
+
+    function renderTasks() {
+        const list = document.getElementById("taskList");
+        list.innerHTML = "";
+
+        tasks.forEach((task, index) => {
+            if (filter === "active" && task.completed) return;
+            if (filter === "completed" && !task.completed) return;
+
+            const li = document.createElement("li");
+            if (task.completed) li.classList.add("completed");
+
+            li.innerHTML = `
+                <span class="task-text" onclick="toggleTask(${index})">${task.text}</span>
+                <button class="delete-btn" onclick="deleteTask(${index})">&times;</button>
+            `;
+
+            list.appendChild(li);
+        });
+    }
+
+    renderTasks();
+</script>
+
+</body>
+</html>
