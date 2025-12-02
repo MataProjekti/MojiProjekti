@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Super Web Aplikacija</title>
+
+<style>
+:root {
+    --bg: #f5f5f7;
+    --bg-dark: #1a1a1a;
+    --text: #222;
+    --text-dark: #eee;
+    --accent: #4b73ff;
+    --accent-dark: #3a5be0;
+    --radius: 14px;
+    --speed: 0.25s;
+}
+
+[data-theme="dark"] {
+    --bg: #1a1a1a;
+    --text: #eee;
+}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: system-ui, sans-serif;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    height: 100vh;
+    overflow: hidden;
+}
+#login-screen {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg);
+    z-index: 9999;
+}
+
+.login-box {
+    width: 350px;
+    padding: 30px;
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    animation: fadeIn 0.6s ease;
+}
+
+@keyframes fadeIn {
+    from {opacity: 0; transform: translateY(30px);}
+    to {opacity: 1; transform: translateY(0);}
+}
+
+.login-box h2 {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.login-box input {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    border-radius: var(--radius);
+    border: 1px solid #ccc;
+}
+
+.login-box button {
+    width: 100%;
+    margin-top: 20px;
+    padding: 12px;
+    background: var(--accent);
+    color: white;
+    border-radius: var(--radius);
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.login-box button:hover {
+    background: var(--accent-dark);
+}
+#loading-screen {
+    position: fixed;
+    inset: 0;
+    background: var(--bg);
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.skeleton-box {
+    width: 80%;
+    max-width: 600px;
+}
+
+.skeleton {
+    height: 15px;
+    margin: 10px 0;
+    border-radius: var(--radius);
+    background: linear-gradient(90deg, #ddd, #eee, #ddd);
+    background-size: 300%;
+    animation: skeleton 1.5s infinite;
+}
+
+@keyframes skeleton {
+    0% {background-position: 0%;}
+    100% {background-position: -200%;}
+}
+.app {
+    display: none;
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 250px auto;
+    overflow: hidden;
+}
+
+.sidebar {
+    background: #222;
+    color: #fff;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.sidebar a {
+    padding: 12px;
+    border-radius: var(--radius);
+    margin-bottom: 8px;
+    color: white;
+    text-decoration: none;
+    transition: var(--speed);
+}
+
+.sidebar a:hover {
+    background: rgba(255,255,255,0.1);
+}
+
+.sidebar a.active {
+    background: var(--accent);
+}
+.topbar {
+    height: 60px;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 20px;
+    gap: 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+.topbar button {
+    padding: 8px 14px;
+    border-radius: var(--radius);
+    border: none;
+    cursor: pointer;
+    background: var(--accent);
+    color: white;
+}
+
+</style>
+</head>
+
+<body>
+<div id="login-screen">
+    <div class="login-box">
+        <h2>Prijava</h2>
+        <input type="text" id="user" placeholder="Korisničko ime">
+        <input type="password" id="pass" placeholder="Lozinka">
+        <button onclick="login()">Uđi u aplikaciju</button>
+    </div>
+</div>
+<div id="loading-screen">
+    <div class="skeleton-box">
+        <div class="skeleton"></div>
+        <div class="skeleton"></div>
+        <div class="skeleton"></div>
+        <div class="skeleton"></div>
+    </div>
+</div>
+<div class="app" id="app">
+    <div class="sidebar">
+        <h1>📘 Aplikacija</h1>
+        <a href="#" class="active">Dashboard</a>
+        <a href="#">Grafikon</a>
+        <a href="#">Komponente</a>
+        <a href="#">Chat</a>
+        <a href="#">Profil</a>
+        <a href="#">Podešavanja</a>
+    </div>
+
+    <div class="main">
+        <div class="topbar">
+            <button onclick="toggleTheme()">🌙 Teme</button>
+            <button onclick="showToast()">🔔 Obaveštenje</button>
+        </div>
+
+        <div id="content" style="padding:20px;">
+            <h2>Dobrodošao!</h2>
+            <p>Ovo je moja super web aplikacija 👋</p>
+        </div>
+    </div>
+</div>
+
+<script>
+function login() {
+    document.getElementById("login-screen").style.display = "none";
+    document.getElementById("loading-screen").style.display = "flex";
+
+    setTimeout(() => {
+        document.getElementById("loading-screen").style.display = "none";
+        document.getElementById("app").style.display = "grid";
+    }, 2000);
+}
+function toggleTheme() {
+    let html = document.documentElement;
+    html.dataset.theme = html.dataset.theme === "dark" ? "light" : "dark";
+}
+</script>
+<style>
+  .toast-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 999999;
+  }
+  .toast {
+      background: var(--accent);
+      color: white;
+      padding: 14px 22px;
+      margin-top: 10px;
+      border-radius: var(--radius);
+      opacity: 0;
+      transform: translateX(80px);
+      animation: toast-in 0.4s forwards;
+  }
+  @keyframes toast-in {
+      to {opacity: 1; transform: translateX(0);}
+  }
+  .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 3000;
+  }
+  .modal-box {
+      width: 380px;
+      background: white;
+      padding: 25px;
+      border-radius: var(--radius);
+      animation: modalOpen 0.4s ease;
+  }
+  @keyframes modalOpen {
+      from {transform: scale(.6); opacity: 0;}
+      to {transform: scale(1); opacity: 1;}
+  }
+  .tooltip-wrap {
+      position: relative;
+      display: inline-block;
+  }
+  .tooltip-wrap:hover .tooltip {
+      opacity: 1;
+      transform: translateY(-6px);
+  }
+  .tooltip {
+      position: absolute;
+      left: 50%;
+      bottom: 120%;
+      transform: translateX(-50%);
+      background: black;
+      color: white;
+      padding: 6px 10px;
+      border-radius: var(--radius);
+      opacity: 0;
+      transition: .25s;
+      pointer-events: none;
+  }
+  .tabs {
+      display: flex;
+      gap: 10px;
+  }
+  .tabs button {
+      padding: 10px;
+      border-radius: var(--radius);
+      border: none;
+      cursor: pointer;
+      background: #ddd;
+  }
+  .tabs button.active {
+      background: var(--accent);
+      color: white;
+  }
+  .tab-content {
+      margin-top: 20px;
+  }
+  .accordion-item {
+      background: white;
+      border-radius: var(--radius);
+      margin-top: 10px;
+      overflow: hidden;
+  }
+  .accordion-header {
+      padding: 14px;
+      cursor: pointer;
+      background: #eee;
+  }
+  .accordion-body {
+      padding: 14px;
+      display: none;
+  }
+  .alert {
+      padding: 12px 16px;
+      border-radius: var(--radius);
+      background: #ffe5e5;
+      color: #d70000;
+      margin-top: 10px;
+  }
+  .progress {
+      width: 100%;
+      background: #ccc;
+      height: 14px;
+      border-radius: 10px;
+      margin: 20px 0;
+  }
+  .progress-inner {
+      background: var(--accent);
+      width: 0%;
+      height: 100%;
+      border-radius: 10px;
+      transition: .4s;
+  }
+  .steps {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+  }
+  .step {
+      flex: 1;
+      background: #ddd;
+      height: 8px;
+      border-radius: 10px;
+  }
+  .step.active {
+      background: var(--accent);
+  }
+  .switch {
+      width: 50px;
+      height: 26px;
+      background: #aaa;
+      border-radius: 30px;
+      position: relative;
+      cursor: pointer;
+  }
+  .switch::after {
+      content: "";
+      position: absolute;
+      width: 22px;
+      height: 22px;
+      background: white;
+      border-radius: 50%;
+      top: 2px;
+      left: 2px;
+      transition: .2s;
+  }
+  .switch.active {
+      background: var(--accent);
+  }
+  .switch.active::after {
+      left: 26px;
+  }
+  .fab {
+      position: fixed;
+      right: 25px;
+      bottom: 25px;
+      width: 60px;
+      height: 60px;
+      background: var(--accent);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 28px;
+      cursor: pointer;
+      z-index: 99999;
+      transition: .3s;
+  }
+  .bell-wrap {
+      position: relative;
+  }
+  .bell-dropdown {
+      position: absolute;
+      top: 40px;
+      right: 0;
+      width: 220px;
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+      display: none;
+  }
+  .bell-dropdown div {
+      padding: 12px;
+      border-bottom: 1px solid #eee;
+  }
+  .bell-dropdown div:last-child {
+      border: none;
+  }
+  </style>
+  <div class="toast-container" id="toastBox"></div>
+
+  <div class="modal-backdrop" id="modal">
+      <div class="modal-box">
+          <h3>Modal prozor</h3>
+          <p>Ovo je primer modal prozora ovaj nista ne radi.</p>
+          <button onclick="closeModal()" style="margin-top:15px;">Zatvori</button>
+      </div>
+  </div>
+
+  <div class="fab" onclick="showModal()">+</div>
+  
+  <script>
+  function showToast() {
+      const box = document.getElementById("toastBox");
+      const toast = document.createElement("div");
+      toast.className = "toast";
+      toast.textContent = "Nova notifikacija!";
+      box.appendChild(toast);
+  
+      setTimeout(() => toast.remove(), 3000);
+  }
+  function showModal() {
+      document.getElementById("modal").style.display = "flex";
+  }
+  function closeModal() {
+      document.getElementById("modal").style.display = "none";
+  }
+  </script>
+  <style>
+  .chart-box {
+      width: 100%;
+      max-width: 600px;
+      background: white;
+      padding: 20px;
+      border-radius: var(--radius);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+      margin-top: 20px;
+  }
+  .table-wrapper {
+      margin-top: 20px;
+      background: white;
+      padding: 20px;
+      border-radius: var(--radius);
+  }
+  table {
+      width: 100%;
+      border-collapse: collapse;
+  }
+  th, td {
+      padding: 12px;
+      border-bottom: 1px solid #eee;
+      text-align: left;
+  }
+  th {
+      cursor: pointer;
+      user-select: none;
+  }
+  th:hover {
+      color: var(--accent);
+  }
+  .search-box input {
+      width: 300px;
+      padding: 10px;
+      border-radius: var(--radius);
+      border: 1px solid #bbb;
+      margin-bottom: 10px;
+  }
+  .pagination {
+      margin-top: 15px;
+      display: flex;
+      gap: 10px;
+  }
+  .pagination button {
+      padding: 8px 14px;
+      border-radius: var(--radius);
+      border: none;
+      background: var(--accent);
+      color: white;
+      cursor: pointer;
+  }
+  .badge {
+      padding: 6px 10px;
+      background: var(--accent);
+      color: white;
+      border-radius: var(--radius);
+      font-size: 13px;
+  }
+  
+  .chip {
+      padding: 6px 12px;
+      background: #ddd;
+      border-radius: 20px;
+      font-size: 13px;
+      margin-right: 5px;
+      display: inline-block;
+  }
+  .dropdown {
+      position: relative;
+      display: inline-block;
+  }
+  .dropdown-btn {
+      padding: 10px 14px;
+      background: var(--accent);
+      color: white;
+      border-radius: var(--radius);
+      cursor: pointer;
+  }
+  .dropdown-menu {
+      position: absolute;
+      background: white;
+      width: 150px;
+      border-radius: var(--radius);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+      margin-top: 5px;
+      display: none;
+  }
+  .dropdown-menu div {
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+      cursor: pointer;
+  }
+  .dropdown-menu div:hover {
+      background: #f5f5f5;
+  }
+  .loader {
+      width: 40px;
+      height: 40px;
+      border: 5px solid #ddd;
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 1s infinite linear;
+      margin-top: 20px;
+  }
+  @keyframes spin {
+      to {transform: rotate(360deg);}
+  }
+  #chatWidget {
+      position: fixed;
+      bottom: 25px;
+      left: 25px;
+      width: 280px;
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      display: none;
+      flex-direction: column;
+  }
+  .chat-header {
+      background: var(--accent);
+      color: white;
+      padding: 12px;
+      border-radius: var(--radius) var(--radius) 0 0;
+  }
+  .chat-body {
+      padding: 10px;
+      height: 200px;
+      overflow-y: auto;
+  }
+  .chat-input {
+      display: flex;
+      padding: 10px;
+      gap: 5px;
+  }
+  .chat-input input {
+      flex: 1;
+      padding: 8px;
+      border-radius: var(--radius);
+      border: 1px solid #bbb;
+  }
+  .chat-input button {
+      padding: 8px 14px;
+      border: none;
+      border-radius: var(--radius);
+      background: var(--accent);
+      color: white;
+      cursor: pointer;
+  }
+  .sidebar a {
+      transform: translateX(-10px);
+      opacity: 0;
+      animation: slideIn .4s forwards;
+  }
+  .sidebar a:nth-child(1) { animation-delay: .1s; }
+  .sidebar a:nth-child(2) { animation-delay: .2s; }
+  .sidebar a:nth-child(3) { animation-delay: .3s; }
+  .sidebar a:nth-child(4) { animation-delay: .4s; }
+  .sidebar a:nth-child(5) { animation-delay: .5s; }
+  .sidebar a:nth-child(6) { animation-delay: .6s; }
+  
+  @keyframes slideIn {
+      to {transform: translateX(0); opacity: 1;}
+  }
+  </style>
+  <div id="graphSection" style="padding:20px; display:none;">
+      <h2>Grafikon</h2>
+      <div class="chart-box">
+          <canvas id="myChart" width="400" height="200"></canvas>
+      </div>
+  </div>
+
+  <div id="tableSection" style="padding:20px; display:none;">
+      <h2>Tabela podataka</h2>
+  
+      <div class="search-box">
+          <input type="text" id="searchInput" placeholder="Pretraga..." oninput="filterTable()">
+      </div>
+  
+      <div class="table-wrapper">
+          <table id="dataTable">
+              <thead>
+                  <tr>
+                      <th onclick="sortTable(0)">Ime</th>
+                      <th onclick="sortTable(1)">Godine</th>
+                      <th onclick="sortTable(2)">Grad</th>
+                      <th onclick="sorttable(3)">Zanimanje</th> 
+                  </tr>
+              </thead>
+              <tbody id="tableBody"></tbody>
+          </table>
+  
+          <div class="pagination">
+              <button onclick="prevPage()">Prethodna</button>
+              <button onclick="nextPage()">Sledeća</button>
+          </div>
+      </div>
+  </div>
+  <div id="chatWidget">
+      <div class="chat-header">Chat Bot</div>
+      <div class="chat-body" id="chatBody"></div>
+      <div class="chat-input">
+          <input type="text" id="chatMsg" placeholder="Poruka...">
+          <button onclick="sendChat()">Pošalji</button>
+      </div>
+  </div>
+  <script>
+  function loadChart() {
+      let ctx = document.getElementById("myChart").getContext("2d");
+  
+      let chart = new Chart(ctx, {
+          type: "line",
+          data: {
+              labels: ["Jan", "Feb", "Mar", "Apr", "Maj", "Jun"],
+              datasets: [{
+                  label: "Prodaja",
+                  data: [10, 25, 40, 20, 60, 80],
+                  borderColor: "#4b73ff",
+                  borderWidth: 3,
+                  fill: false
+              }]
+          },
+          options: { responsive: true }
+      });
+  }
+
+  const tableData = [
+      ["Marko", 22, "Pirot, Student"],
+      ["Ana", 19, "Dimitrovrgrad, Radnik u fabrici"],
+      ["Luka", 30, "Niš, Obucar"],
+      ["Teodora", 26, "Babusnica, Lozac"],
+      ["Lazar", 22, "Berduj, Klosar"],
+      ["Milan", 22, "Rogoz, Bilder"],
+      ["Lazar D", 22, "Krupc, Tigar"],
+      ["Sara", 24, "Pirot, Domacica"]
+  ];
+  
+  let currentPage = 0;
+  const rowsPerPage = 4;
+  
+  function renderTable() {
+      let tbody = document.getElementById("tableBody");
+      tbody.innerHTML = "";
+  
+      let start = currentPage * rowsPerPage;
+      let end = start + rowsPerPage;
+  
+      tableData.slice(start, end).forEach(row => {
+          let tr = document.createElement("tr");
+          row.forEach(cell => {
+              let td = document.createElement("td");
+              td.textContent = cell;
+              tr.appendChild(td);
+          });
+          tbody.appendChild(tr);
+      });
+  }
+  renderTable();
+  
+  function nextPage() {
+      if ((currentPage + 1) * rowsPerPage < tableData.length) {
+          currentPage++;
+          renderTable();
+      }
+  }
+  function prevPage() {
+      if (currentPage > 0) {
+          currentPage--;
+          renderTable();
+      }
+  }
+  function sortTable(columnIndex) {
+      tableData.sort((a, b) => a[columnIndex] > b[columnIndex] ? 1 : -1);
+      renderTable();
+  }
+  function filterTable() {
+      let val = document.getElementById("searchInput").value.toLowerCase();
+      let rows = document.querySelectorAll("#dataTable tbody tr");
+  
+      rows.forEach(row => {
+          row.style.display = row.textContent.toLowerCase().includes(val)
+              ? ""
+              : "none";
+      });
+  }
+  function toggleChat() {
+      let chat = document.getElementById("chatWidget");
+      chat.style.display = chat.style.display === "flex" ? "none" : "flex";
+  }
+  document.querySelector(".fab").addEventListener("dblclick", toggleChat);
+  
+  function sendChat() {
+      let input = document.getElementById("chatMsg");
+      let msg = input.value.trim();
+      if (!msg) return;
+  
+      let body = document.getElementById("chatBody");
+  
+      body.innerHTML += `<div><b>Ti:</b> ${msg}</div>`;
+      input.value = "";
+  
+      setTimeout(() => {
+          body.innerHTML += `<div><b>Bot:</b> Zanimljivo! :)</div>`;
+          body.scrollTop = body.scrollHeight;
+      }, 600);
+  }
+  </script>
+<div class="notification-demo">
+<h2>Notifikacije</h2>
+<button class="notif-btn">
+    Poruke
+    <span class="notif-badge">5</span>
+</button>
+</div>
+
+<style>
+.notif-btn{
+background:#1a73e8;
+color:white;
+border:none;
+padding:10px 16px;
+border-radius:8px;
+cursor:pointer;
+font-size:15px;
+position:relative;
+}
+.notif-badge{
+position:absolute;
+top:-6px;
+right:-6px;
+background:red;
+color:white;
+font-size:12px;
+padding:2px 6px;
+border-radius:50%;
+}
+</style>
+<section class="cards-section">
+<h2>Karticete</h2>
+<div class="cards-grid">
+    <div class="card">
+        <h3>Jbg random</h3>
+        <p>Prva kartica.</p>
+    </div>
+    <div class="card">
+        <h3>Druga</h3>
+        <p>Druga kartica.</p>
+    </div>
+    <div class="card">
+        <h3>Random ass kartice </h3>
+        <p>zadnja kartica.</p>
+    </div>
+</div>
+</section>
+
+<style>
+.cards-section{margin-top:50px;}
+.cards-grid{
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+gap:20px;
+}
+.card{
+background:#fff;
+padding:20px;
+border-radius:16px;
+box-shadow:0 2px 12px rgba(0,0,0,0.1);
+transition:0.3s;
+}
+.card:hover{
+transform:translateY(-4px);
+}
+</style>
+<section style="margin-top:50px">
+<h2>Modal prozor</h2>
+<button class="open-modal">Otvori modal</button>
+
+<div id="modal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h2>Ovo je modal</h2>
+        <p>Zelim da postanem frontend developer.<br>
+        Frontend developer je programer koji pravi sajtove<br>
+        On radi sto svaki korisnik vidi i koriti jezike kao html,css,javaskript i react<br>
+        </p>
+    </div>
+</div>
+</section>
+<style>
+.open-modal{
+padding:10px 20px;
+background:#4CAF50;
+color:#fff;
+border:none;
+border-radius:8px;
+cursor:pointer;
+}
+.modal{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.6);
+justify-content:center;
+align-items:center;
+}
+.modal-content{
+background:#fff;
+width:400px;
+padding:30px;
+border-radius:16px;
+position:relative;
+}
+.close-modal{
+position:absolute;
+right:20px;
+top:10px;
+cursor:pointer;
+font-size:24px;
+}
+</style>
+
+<script>
+document.querySelector(".open-modal").onclick = () =>{
+document.getElementById("modal").style.display="flex";
+}
+document.querySelector(".close-modal").onclick = () =>{
+document.getElementById("modal").style.display="none";
+}
+</script>
+<section class="profile-card">
+<img src="https://i.pravatar.cc/150" alt="FullStackDeveloper">
+<h3>Mateja Aleksov</h3>
+<p>Front end Developer</p>
+<button class="profile-btn">Zapratite</button>
+</section>
+
+<style>
+.profile-card{
+margin-top:50px;
+width:260px;
+background:#fff;
+padding:20px;
+border-radius:20px;
+text-align:center;
+box-shadow:0 2px 12px rgba(0,0,0,0.1);
+}
+.profile-card img{
+width:100px;
+border-radius:50%;
+}
+.profile-btn{
+margin-top:10px;
+padding:8px 20px;
+background:#1a73e8;
+color:#fff;
+border:none;
+border-radius:10px;
+cursor:pointer;
+}
+</style>
+<section>
+<h2>Pretraga</h2>
+<div class="search-box">
+    <input type="text" placeholder="Pretraga...">
+    <button>🔍</button>
+</div>
+</section>
+
+<style>
+.search-box{
+display:flex;
+width:300px;
+background:#fff;
+padding:10px;
+border-radius:12px;
+box-shadow:0 1px 8px rgba(0,0,0,0.1);
+}
+.search-box input{
+border:none;
+outline:none;
+flex:1;
+}
+.search-box button{
+background:none;
+border:none;
+cursor:pointer;
+}
+</style>
+<section style="margin-top:50px;">
+<h2>Dropdown</h2>
+<div class="dropdown">
+    <button class="dropdown-btn">Izaberi opciju</button>
+    <div class="dropdown-menu">
+        <p>Kurs</p>
+        <p>Fakultet</p>
+        <p>Poslovi</p>
+    </div>
+</div>
+</section>
+
+<style>
+.dropdown{
+position:relative;
+width:200px;
+}
+.dropdown-btn{
+width:100%;
+background:#eee;
+border:none;
+padding:10px;
+border-radius:8px;
+cursor:pointer;
+font-weight:bold;
+}
+.dropdown-menu{
+display:none;
+position:absolute;
+background:#fff;
+width:100%;
+margin-top:5px;
+padding:10px;
+border-radius:12px;
+box-shadow:0 2px 12px rgba(0,0,0,0.1);
+}
+.dropdown-menu p{
+margin:0;
+padding:8px;
+cursor:pointer;
+}
+.dropdown-menu p:hover{
+background:#f6f6f6;
+}
+</style>
+
+<script>
+document.querySelector(".dropdown-btn").onclick = () =>{
+document.querySelector(".dropdown-menu").style.display =
+document.querySelector(".dropdown-menu").style.display === "block" ? "none" : "block";
+}
+</script>
+<section style="margin-top:50px;">
+    <h2>Slajder</h2>
+    <input type="range" min="0" max="100" value="50" id="rangeSlider">
+    <span id="rangeValue">50</span>
+</section>
+
+<script>
+const rangeSlider = document.getElementById("rangeSlider");
+const rangeValue = document.getElementById("rangeValue");
+rangeSlider.oninput = () => {
+    rangeValue.textContent = rangeSlider.value;
+}
+</script>
+<section style="margin-top:50px;">
+    <h2>Multi step anketa</h2>
+    <div class="steps">
+        <div class="step active"></div>
+        <div class="step"></div>
+        <div class="step"></div>
+    </div>
+    <button onclick="nextStep()">Sledeći</button>
+</section>
+
+<script>
+let currentStep = 0;
+const steps = document.querySelectorAll(".step");
+function nextStep(){
+    if(currentStep<steps.length-1){
+        steps[currentStep].classList.remove("active");
+        currentStep++;
+        steps[currentStep].classList.add("active");
+    }
+}
+</script>
+<section style="margin-top:50px;">
+    <h2>Timeline</h2>
+    <div class="timeline">
+        <div class="timeline-item">Krenula je sezona 2025/2026 i arsenal je nezaustavljiv.</div>
+        <div class="timeline-item">Nastavljaju da budu fantastični i osvajaju Premier Ligu.</div>
+        <div class="timeline-item">Nakon toga osvajaju spektakularno finale lige šampiona protiv real madrida 4-1</div>
+    </div>
+</section>
+
+<style>
+.timeline{
+    position:relative;
+    margin-top:20px;
+    padding-left:20px;
+    border-left:3px solid var(--accent);
+}
+.timeline-item{
+    margin-bottom:15px;
+    padding-left:10px;
+}
+</style>
+<section style="margin-top:50px;">
+    <h2>Karusel slajder</h2>
+    <div class="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">Prvi slajd</div>
+            <div class="carousel-item">Drugi slajd</div>
+            <div class="carousel-item">Treci slajd</div>
+        </div>
+        <button onclick="prevSlide()">◀</button>
+        <button onclick="nextSlide()">▶</button>
+    </div>
+</section>
+
+<style>
+.carousel{
+    position:relative;
+    width:300px;
+    overflow:hidden;
+}
+.carousel-inner{
+    display:flex;
+    transition:0.4s;
+}
+.carousel-item{
+    min-width:300px;
+    padding:20px;
+    background:#eee;
+    border-radius:12px;
+    text-align:center;
+}
+.carousel button{
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    background:var(--accent);
+    color:white;
+    border:none;
+    padding:5px 10px;
+    border-radius:8px;
+    cursor:pointer;
+}
+.carousel button:nth-child(2){ left:5px; }
+.carousel button:nth-child(3){ right:5px; }
+</style>
+
+<script>
+let carouselIndex = 0;
+function updateCarousel(){
+    const inner = document.querySelector(".carousel-inner");
+    inner.style.transform = `translateX(-${carouselIndex*300}px)`;
+}
+function nextSlide(){
+    const items = document.querySelectorAll(".carousel-item");
+    carouselIndex = (carouselIndex+1)%items.length;
+    updateCarousel();
+}
+function prevSlide(){
+    const items = document.querySelectorAll(".carousel-item");
+    carouselIndex = (carouselIndex-1+items.length)%items.length;
+    updateCarousel();
+}
+</script>
+<script>
+function showToastPro(msg="Toast Poruka!"){
+    const box = document.getElementById("toastBox");
+    const toast = document.createElement("div");
+    toast.className="toast";
+    toast.textContent=msg;
+    box.appendChild(toast);
+    setTimeout(()=>toast.remove(),3500);
+}
+</script>
+<section style="margin-top:50px;">
+    <h2>Kalendar</h2>
+    <input type="date">
+</section>
+<section style="margin-top:20px;">
+    <h2>Navigacija</h2>
+    <nav>
+        <a href="#">Početna</a> &gt;
+        <a href="#">Dashboard</a> &gt;
+        <a href="#">Grafikon</a>
+    </nav>
+</section>
+<section style="margin-top:20px;">
+    <h2>Ikonica za status</h2>
+    <span class="chip">Online</span>
+    <span class="chip" style="background:#f44336;color:white;">Offline</span>
+    <span class="chip" style="background:#ff9800;color:white;">Pending</span>
+</section>
+<style>
+.scroll-anim{
+    opacity:0;
+    transform:translateY(20px);
+    transition:0.5s;
+}
+.scroll-anim.visible{
+    opacity:1;
+    transform:translateY(0);
+}
+</style>
+
+<script>
+window.addEventListener("scroll",()=>{
+    document.querySelectorAll(".scroll-anim").forEach(el=>{
+        if(el.getBoundingClientRect().top < window.innerHeight - 50){
+            el.classList.add("visible");
+        }
+    });
+});
+</script>
+<script>
+    // Sidebar navigacija
+    const links = document.querySelectorAll(".sidebar a");
+    const contentBox = document.getElementById("content");
+    const graphBox = document.getElementById("graphSection");
+    const tableBox = document.getElementById("tableSection");
+    
+    // RESET svih sekcija
+    function hideAll() {
+        contentBox.style.display = "none";
+        graphBox.style.display = "none";
+        tableBox.style.display = "none";
+    }
+    
+    // Klik funkcija
+    links.forEach((link, index) => {
+        link.addEventListener("click", () => {
+            links.forEach(l => l.classList.remove("active"));
+            link.classList.add("active");
+    
+            hideAll();
+    
+            if (index === 0) { 
+                contentBox.style.display = "block";
+            }
+            if (index === 1) { 
+                graphBox.style.display = "block";
+                loadFrontendChart();
+            }
+            if (index === 2) { 
+                showFrontendComponents();
+            }
+            if (index === 3) {
+                toggleChat();
+            }
+        });
+    });
+    
+    // ===== FRONTEND GRAFIKON =====
+    
+    function loadChart() {
+        let ctx = document.getElementById("myChart").getContext("2d");
+    
+        new Chart(ctx, {
+            type: "bar",
+            data: {
+                labels: ["HTML", "CSS", "JavaScript", "React", "Git", "Backend"],
+                datasets: [{
+                    label: "Nivo savladanosti tehnologija",
+                    data: [90, 85, 70, 60, 50, 20],
+                    backgroundColor: ["#ff5733", "#1e90ff", "#f7df1e", "#61dafb", "#444", "#8e44ad"]
+                }]
+            },
+            options: { responsive: true }
+        });
+    }
+    
+    // ===== FRONTEND KOMPONENTE — DINAMIČKI SADRŽAJ =====
+    function showFrontendComponents() {
+        contentBox.style.display = "block";
+        contentBox.innerHTML = `
+            <h2>Frontend Development – Sve što trebaš znati</h2>
+            <p>Frontend developer pravi sve što korisnik vidi u pretraživaču.</p>
+    
+            <h3>🔧 Tehnologije</h3>
+            <ul>
+                <li><b>HTML</b> – struktura stranice</li>
+                <li><b>CSS</b> – izgled, stil, animacije</li>
+                <li><b>JavaScript</b> – logika, funkcije, interakcija</li>
+                <li><b>React</b> – moderni frontend framework</li>
+                <li><b>Git / GitHub</b> – verzionisanje koda</li>
+            </ul>
+    
+            <h3>📚 Šta treba da naučiš da bi bio dobar frontend developer:</h3>
+            <p>✔ Izrada layout-a (Flexbox, Grid)<br>
+               ✔ Komponente, reusable kod<br>
+               ✔ API komunikacija<br>
+               ✔ Responsive dizajn<br>
+               ✔ Rad sa dizajn alatima (Figma)</p>
+    
+            <h3>🚀 Put do junior programera:</h3>
+            <ol>
+                <li>HTML & CSS</li>
+                <li>JavaScript osnove</li>
+                <li>Napredni JavaScript</li>
+                <li>React kompletno</li>
+                <li>Pravljenje 5–10 projekata</li>
+            </ol>
+    
+            <div class="card" style="margin-top:20px;">
+                <h3>Frontend mini-kviz</h3>
+                <p>Šta radi CSS Grid?</p>
+                <button>A) Pravi strukturu stranice</button>
+                <button>B) Omogućava 2D raspored elemenata ✔</button>
+                <button>C) Povezuje bazu</button>
+            </div>
+        `;
+    }
+    </script>    
+<h2 class="scroll-anim" style="margin-top:50px;">Ovde je sve sto sam naucio u htmlu,css-u i javaskript-u/h2>
+<p class="scroll-anim">Ovo je moja ogromna aplikacija sa preko 40 UI komponenti, dark/light mode, charts, tabelama, modalima, toast notifikacijama i još mnogo toga.</p>
+</body>
+</html>
