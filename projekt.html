@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moderna Interaktivna Forma</title>
+
+    <style>
+        /* ---------- GLOBAL STYLING ---------- */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Segoe UI", Roboto, Arial, sans-serif;
+            background: linear-gradient(135deg, #1e1f26, #2e2f38, #121212);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #eee;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 500px;
+            padding: 30px;
+            border-radius: 20px;
+            backdrop-filter: blur(15px);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 30px rgba(0,0,0,0.4);
+            animation: fadeIn 0.8s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            text-align: center;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        /* ---------- FIELDSETS ---------- */
+        fieldset {
+            border: none;
+            margin: 0;
+            padding: 0;
+            margin-bottom: 25px;
+        }
+
+        legend {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            color: #7abaff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* ---------- LABELS & INPUTS ---------- */
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+            color: #d0d8f0;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #fff;
+            outline: none;
+            transition: 0.3s ease;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            background: rgba(255,255,255,0.15);
+            border-color: #7abaff;
+            box-shadow: 0 0 8px #7abaff67;
+        }
+
+        textarea {
+            resize: none;
+        }
+
+        /* ---------- BUTTON ---------- */
+        button {
+            width: 100%;
+            padding: 15px;
+            margin-top: 10px;
+            font-size: 1.1rem;
+            background: linear-gradient(135deg, #2979ff, #2962ff);
+            border: none;
+            border-radius: 12px;
+            color: #fff;
+            cursor: pointer;
+            transition: 0.25s ease;
+            letter-spacing: 1px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, #5393ff, #3d7bff);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        /* ---------- RESULT BOX ---------- */
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(76, 175, 80, 0.15);
+            border-left: 4px solid #4caf50;
+            border-radius: 8px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .result pre {
+            white-space: pre-wrap;
+            color: #baffbf;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>Moderna Interaktivna Forma</h2>
+
+    <form id="formData">
+
+        <fieldset>
+            <legend>Lični podaci</legend>
+
+            <label for="fullname">Ime i prezime</label>
+            <input type="text" id="fullname" name="fullname" required placeholder="Unesi puno ime">
+
+            <label for="email">Email adresa</label>
+            <input type="email" id="email" name="email" required placeholder="primer@email.com">
+
+            <label for="password">Lozinka</label>
+            <input type="password" id="password" name="password" required minlength="6"
+                   pattern="^(?=.*[A-Za-z])(?=.*\d).{6,}$"
+                   placeholder="Min 6 karaktera • slova i brojevi">
+
+            <label for="phone">Broj telefona</label>
+            <input type="tel" id="phone" name="phone"
+                   pattern="^[0-9+ ]{6,15}$"
+                   placeholder="npr. +381 63 1234567">
+
+            <label for="country">Država</label>
+            <input list="countries" id="country" name="country" placeholder="Kucaj ili izaberi">
+            <datalist id="countries">
+                <option value="Srbija">
+                <option value="Crna Gora">
+                <option value="Bosna i Hercegovina">
+                <option value="Hrvatska">
+                <option value="Severna Makedonija">
+            </datalist>
+        </fieldset>
+
+        <fieldset>
+            <legend>Poruka</legend>
+
+            <label for="topic">Tema poruke</label>
+            <select id="topic" name="topic" required>
+                <option value="">Izaberi…</option>
+                <option value="podrska">Podrška</option>
+                <option value="nalog">Problem sa nalogom</option>
+                <option value="saradnja">Saradnja</option>
+                <option value="ostalo">Ostalo</option>
+            </select>
+
+            <label for="message">Poruka</label>
+            <textarea id="message" name="message" rows="4" required placeholder="Unesi poruku"></textarea>
+        </fieldset>
+
+        <button type="submit">Pošalji</button>
+
+        <div id="result"></div>
+    </form>
+</div>
+
+<script>
+    const form = document.getElementById('formData');
+    const resultBox = document.getElementById('result');
+
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const data = new FormData(form);
+        const obj = Object.fromEntries(data);
+
+        resultBox.innerHTML = `
+            <div class="result">
+                <strong>Forma uspešno poslata!</strong><br><br>
+                <pre>${JSON.stringify(obj, null, 4)}</pre>
+            </div>
+        `;
+    });
+</script>
+
+</body>
+</html>
