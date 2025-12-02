@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="UTF-8">
+<title>Animirani UI Komponenti (CSS + malo JS)</title>
+<style>
+:root {
+  --trajanje: 0.35s;
+  --boja-primarna: #4e73df;
+  --boja-pozadina: #f5f6fa;
+  --radius: 12px;
+}
+body {
+  font-family: Arial, sans-serif;
+  background: var(--boja-pozadina);
+  margin: 40px;
+  color: #333;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+button {
+  background: var(--boja-primarna);
+  border: none;
+  color: white;
+  padding: 10px 15px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background var(--trajanje);
+}
+button:hover {
+  background: #2e59d9;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: none;
+  place-items: center;
+}
+.modal {
+  background: white;
+  padding: 30px;
+  border-radius: var(--radius);
+  width: 300px;
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity var(--trajanje), transform var(--trajanje);
+}
+
+.modal-overlay.active {
+  display: grid;
+}
+.modal-overlay.active .modal {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.tooltip-container {
+  display: inline-block;
+  position: relative;
+}
+.tooltip-container:hover .tooltip {
+  opacity: 1;
+  transform: translateY(-5px);
+}
+
+.tooltip {
+  position: absolute;
+  background: #222;
+  color: white;
+  padding: 8px 12px;
+  border-radius: var(--radius);
+  opacity: 0;
+  transform: translateY(0px);
+  transition: var(--trajanje);
+  white-space: nowrap;
+  left: 50%;
+  top: -40px;
+  transform: translateX(-50%);
+}
+
+.tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.tab-dugme {
+  padding: 10px 15px;
+  cursor: pointer;
+  background: #ddd;
+  border-radius: var(--radius);
+}
+.tab-dugme.aktivan {
+  background: var(--boja-primarna);
+  color: white;
+}
+
+.tab-sadrzaj {
+  display: none;
+  padding: 20px;
+  background: white;
+  border-radius: var(--radius);
+  animation: fadeIn var(--trajanje);
+}
+.tab-sadrzaj.aktivan {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from {opacity: 0;} to {opacity: 1;}
+}
+
+.toast-container {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  display: grid;
+  gap: 10px;
+}
+
+.toast {
+  background: #333;
+  color: white;
+  padding: 15px;
+  border-radius: var(--radius);
+  opacity: 0;
+  transform: translateX(30px);
+  animation: slideIn var(--trajanje) forwards;
+}
+
+@keyframes slideIn {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+</style>
+</head>
+<body>
+
+<h1>Animirani UI Elementi (CSS + minimalni JS)</h1>
+
+<h2>Modal</h2>
+<button onclick="otvoriModal()">Otvori modal</button>
+
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <h3>Ovo je modal</h3>
+    <p>Možeš ovde staviti bilo koji sadržaj.</p>
+    <button onclick="zatvoriModal()">Zatvori</button>
+  </div>
+</div>
+<h2>Tooltip</h2>
+<div class="tooltip-container">
+  <button>Donesi miš ovde</button>
+  <div class="tooltip">Ovo je tooltip na srpskom 🎉</div>
+</div>
+
+<h2>Tabs (kartice)</h2>
+
+<div class="tabs">
+  <div class="tab-dugme aktivan" onclick="promeniTab(0)">Prvi tab</div>
+  <div class="tab-dugme" onclick="promeniTab(1)">Drugi tab</div>
+  <div class="tab-dugme" onclick="promeniTab(2)">Treci tab</div>
+</div>
+
+<div class="tab-sadrzaj aktivan">Ovaj sadrzaj je u tab jedan Arsenal sampion osvajaju premierku lagano</div>
+<div class="tab-sadrzaj">Ovo je drugi tab Arsenal osvaja i duplu krunu i ligu sampiona lagano</div>
+<div class="tab-sadrzaj">Ovo je treci tab Arsenal sampion</div>
+
+<h2>Toast notifikacija</h2>
+<button onclick="prikaziToast()">Prikaži toast notifikaciju</button>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+function otvoriModal() {
+  document.getElementById("modal").classList.add("active");
+}
+function zatvoriModal() {
+  document.getElementById("modal").classList.remove("active");
+}
+
+function promeniTab(i) {
+  let dugmad = document.querySelectorAll(".tab-dugme");
+  let sadrzaji = document.querySelectorAll(".tab-sadrzaj");
+
+  dugmad.forEach(e => e.classList.remove("aktivan"));
+  sadrzaji.forEach(e => e.classList.remove("aktivan"));
+
+  dugmad[i].classList.add("aktivan");
+  sadrzaji[i].classList.add("aktivan");
+}
+
+function prikaziToast() {
+  const kontejner = document.getElementById("toastContainer");
+  const toast = document.createElement("div");
+  toast.className = "toast";
+  toast.textContent = "Ovo je notifikaciona poruka!";
+  kontejner.appendChild(toast);
+
+  setTimeout(() => toast.remove(), 3000);
+}
+</script>
+
+</body>
+</html>
